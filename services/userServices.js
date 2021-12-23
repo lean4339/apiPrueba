@@ -10,8 +10,14 @@ class userService{
 
     }
     async findOne(id){
-        const user = await models.User.findByPk(id);
-        return user;
+        const user = await models.User.findByPk(id,{
+            include: [{association: "UserTurnos",include:"turneras"}],
+        });
+        if(user){
+            return user;
+        }else{
+            return "no existe usuario";
+        }
     }
     async create(name,username,email,password,url_image){
         const user = await models.User.create({
@@ -27,6 +33,7 @@ class userService{
         const user = await models.User.findOne({
             where:{id:id}
         });
+       if(user){
         const update = user.update({
             name,
             username,
@@ -35,7 +42,11 @@ class userService{
             url_image,
 
         });
-        return user;
+        return update;
+       }
+       else{
+           return "no existe usuario";
+       }
     }
     async delete(id){
         const user = await models.User.findOne({

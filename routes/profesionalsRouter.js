@@ -1,18 +1,20 @@
-const UserService = require("../services/userServices");
-const service = new UserService()
-const schema = require("../schemas/userSchema");
+const ProfesionalService = require("../services/profesionalServices");
+const service = new ProfesionalService();
+const schema = require("../schemas/profesionalSchema");
+
+
 
 module.exports =  async function(fastify,options){
     fastify.get("/", async (request,reply)=>{
-        const users = await service.find();
-        reply.send({users});
+        const profesionals = await service.find();
+        reply.send({profesionals});
     })
     fastify.get("/:id", async (request,reply)=>{
         const {id} = request.params;
-        const user = await service.findOne(id);
-        reply.send({user});
+        const profesional = await service.findOne(id);
+        reply.send({profesional});
     });
-    fastify.post("/", schema ,async (request,reply)=>{
+    fastify.post("/",schema ,async (request,reply)=>{
         const {name,username,email,password,url_image} = request.body;
         const user = await service.create(name,username,email,password,url_image);
         reply.send({user});

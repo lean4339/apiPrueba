@@ -2,7 +2,13 @@ const fastify = require('fastify')({
     logger:true
   });
 const path = require("path");
-const homeSchema = require("./schemas/homeSchema");
+
+
+
+//REGISTRO DE CORS
+fastify.register(require("fastify-cors"),{origin:"*",methods:["GET"]});
+
+//REGISTRO DE MODULOS EN FASTIFY
 
 fastify.register(require("point-of-view"), {
     engine: {
@@ -14,23 +20,23 @@ fastify.register(require('fastify-static'), {
     prefix: '/public/', 
   });
 
-const schema  = {
-  querystring: {
-      type: 'object',
-      properties: {
-          saludo: {type: 'string'},
-          numero: {type: 'integer'}
-      },
-      required: ['saludo']
-  }
-}
-fastify.register(require("./routes/productsRouter"),{prefix:"/products"});
+//REGISTRO DE ROUTERS 
+
 fastify.register(require("./routes/usersRouter"),{prefix:"/users"});
-fastify.get('/',{schema: schema},async function (request, reply) {
-    const {saludo} = request.query || "hola mundito";
-    reply.send("hola");
+fastify.register(require("./routes/profesionalsRouter"),{prefix:"/profesionals"});
+fastify.register(require("./routes/itemsRouter"),{prefix:"/itemsTurnera"});
+fastify.register(require("./routes/turnosRouter"),{prefix:"/turnos"});
+fastify.register(require("./routes/turnerasRouter"),{prefix:"/turneras"});
+
+//PAGINA DE INICIO
+
+fastify.get('/',async function (request, reply) {
+    
+    reply.view("/templates/index.ejs",{saludo:"Hola esto es una api con fastify"});
 });
 
+
+//COMIENZO DE LA APPLICACION
 const start = async()=>{
     try{
         fastify.listen(3000)
@@ -41,3 +47,4 @@ const start = async()=>{
     }
 }
 start()
+

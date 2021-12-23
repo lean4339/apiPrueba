@@ -12,6 +12,7 @@
   "dependencies": {
     "ejs": "^3.1.6",
     "fastify": "^3.25.0",
+    "fastify-cors": "^6.0.2",
     "fastify-static": "^4.5.0",
     "pg": "^8.7.1",
     "point-of-view": "^4.16.0",

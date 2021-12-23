@@ -1,10 +1,8 @@
 const {Model,DataTypes, Sequelize} = require("sequelize");
 
+const PROFESIONALS_TABLE = "profesionales";
 
-
-const USERS_TABLE = "users";
-
-const UsersSchema = {
+const ProfesionalsSchema = {
     id: {
         allowNull: false,
         autoIncrement: true,
@@ -30,25 +28,29 @@ const UsersSchema = {
     image_url: {
         allowNull: true,
         type: DataTypes.STRING,
+    },
+    profesionId: {
+        allowNull: true,
+        type: DataTypes.INTEGER,
     }
     
 }
 
-class User extends Model{
-   static associate(models){
-       this.hasMany(models.Turno,{
-           as: "UserTurnos",
-           foreignKey: "idUser"
-       });
-   }
-  
+class Profesional extends Model{
+    static associate(models){
+        this.hasMany(models.Turnera,{
+            as: "turnos profesional",
+            foreignKey: "idProfesional"
+        })
+    }
+   
     static config(sequelize){
         return {
             sequelize,
-            tableName: USERS_TABLE,
-            modelName: "User",
+            tableName: PROFESIONALS_TABLE,
+            modelName: "Profesional",
             timestamps: false
         }
     }
 }
-module.exports = {USERS_TABLE, UsersSchema, User};
+module.exports = {PROFESIONALS_TABLE, ProfesionalsSchema, Profesional};
