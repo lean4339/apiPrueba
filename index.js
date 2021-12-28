@@ -2,6 +2,8 @@ const fastify = require('fastify')({
     logger:true
   });
 const path = require("path");
+const auth = require('./plugins/auth');
+
 
 
 
@@ -34,6 +36,18 @@ fastify.get('/',async function (request, reply) {
     
     reply.view("/templates/index.ejs",{saludo:"Hola esto es una api con fastify"});
 });
+
+//REGISTRANDO WEB TOKEN
+
+/*fastify.register(require('fastify-jwt'), {
+  secret: 'secreto'
+})
+
+*/
+
+// REGISTRANDO MI PLUGIN
+
+fastify.register(auth);
 
 
 //COMIENZO DE LA APPLICACION

@@ -1,4 +1,5 @@
 const {models} = require("../db/sequelize");
+const bcrypt = require("bcrypt");
 
 class userService{
     constructor (){
@@ -20,12 +21,14 @@ class userService{
         }
     }
     async create(name,username,email,password,url_image){
+        const addresCript = bcrypt.hashSync(password,12);
+        console.log(url_image);
         const user = await models.User.create({
             name,
             username,
             email,
-            password,
-            url_image,
+            password: addresCript,
+            image_url: url_image,
         });
         return user;
     }
@@ -58,6 +61,27 @@ class userService{
         }
         else{
             return `Usuario con id: ${id} no encontrado`;
+        }
+    }
+    async login (fastify,email,password){
+        const user = await models.User.findOne({
+            where: {email: email}
+        });
+        if(user){
+            if(bcrypt.compareSync(password, user.password)== true){                
+                //FORMA DE BORRAR LA CONTRASEÑA PARA ENVIARSELA AL USUARIO!!!
+                delete user.dataValues.password
+                const id = user.id;
+                const payload = {
+                    id: id,                    
+                }
+                const token = fastify.jwt.sign(payload,{expiresIn: 120});
+                return {message: "login success!!", user,token:`Bearer ${token}`};
+            }else{
+                return `this password is incorrect`
+            }
+        }else{
+            return `user whit email ${email} not exist`
         }
     }
 }

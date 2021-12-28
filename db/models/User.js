@@ -28,7 +28,7 @@ const UsersSchema = {
         type: DataTypes.STRING,
     },
     image_url: {
-        allowNull: true,
+        allowNull: false,
         type: DataTypes.STRING,
     }
     

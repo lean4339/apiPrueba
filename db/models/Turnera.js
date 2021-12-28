@@ -11,7 +11,7 @@ const TurnerasSchema = {
         allowNull: false,     
     },
     idProfesional: {
-        allowNull: false,
+        allowNull: true,
         type: DataTypes.INTEGER,
         onDelete: "SET NULL",
         onUpdate: "CASCADE",
